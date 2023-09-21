@@ -18,6 +18,7 @@ server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # Bind the socket to a specific address and port
 server_address = ('localhost', 8001)
 server_socket.bind(server_address)
+server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 # Listen for incoming connections
 server_socket.listen()
