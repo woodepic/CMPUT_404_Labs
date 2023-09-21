@@ -3,6 +3,8 @@
 #This template was modified to fit the requirements of the lab, and all code is
 #fully understood. This is simply a time saving measure.
 
+#to activate venv, use:     source myenv/bin/activate
+
 import socket
 
 # Define the target host and port
