@@ -15,7 +15,10 @@ def start_server_st():
         handle_connection(client_socket, client_address)
     
 def start_server_mt():
-    pass
+        while True:
+            client_socket, client_address = proxy_server_socket.accept()
+            thread = Thread(target=handle_connection, args=(client_socket, client_address))
+            thread.run()
 def handle_connection(client_socket, client_address):
     print(f"Accepted client connection from {client_address}")
 
@@ -66,5 +69,5 @@ if __name__ == "__main__":
     proxy_server_socket.listen()
     print("Proxy server is listening on port 8001...")
 
-    start_server_st()
-    #start_server_mt()
+    #start_server_st()
+    start_server_mt()
