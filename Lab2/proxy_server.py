@@ -1,3 +1,9 @@
+#Citations:
+#I used components of client.py and echo_server.py to build this program
+
+#to activate venv, use:     source myenv/bin/activate
+
+
 import socket
 
 google_addr = "www.google.com"
@@ -24,17 +30,24 @@ while True:
 
     #Echo text from client to google
     #Echo response from google to client
+    request = b''
     while True:
-        data = client_socket.recv(4096)
-        if data:
-            google_socket.send(data)
-            google_socket.shutdown(socket.SHUT_WR)
-            response = google_socket.recv(4096)
-            client_socket.send(response)
-
-        else:
-            # If no data is received, close the connection
-            print("No more data received. Closing connection.\n\n")
-            client_socket.close()
-            google_socket.close()
+        chunk = client_socket.recv(4096)
+        if not chunk:
             break
+        request += chunk
+
+    google_socket.send(request)
+    google_socket.shutdown(socket.SHUT_WR)
+
+    response = b''
+    while True:
+        chunk = google_socket.recv(4096)
+        if not chunk:
+            break
+        response += chunk
+    client_socket.send(response)
+
+    print("Proxy task completed. No more data. Closing connection.\n\n")
+    client_socket.close()
+    google_socket.close()
