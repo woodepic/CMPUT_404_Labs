@@ -37,7 +37,7 @@ while True:
             break
         request += chunk
 
-    google_socket.send(request)
+    google_socket.sendall(request)
     google_socket.shutdown(socket.SHUT_WR)
 
     response = b''
@@ -46,7 +46,7 @@ while True:
         if not chunk:
             break
         response += chunk
-    client_socket.send(response)
+    client_socket.sendall(response)
 
     print("Proxy task completed. No more data. Closing connection.\n\n")
     client_socket.close()
