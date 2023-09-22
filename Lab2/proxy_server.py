@@ -19,7 +19,7 @@ def start_server_mt():
     while True:
         client_socket, client_address = proxy_server_socket.accept()
         thread = Thread(target=handle_connection, args=(client_socket, client_address))
-        thread.start()
+        thread.start() #create a new thread, and handle the connection
 
 def handle_connection(client_socket, client_address):
     print(f"Accepted client connection from {client_address}")
@@ -29,6 +29,7 @@ def handle_connection(client_socket, client_address):
     google_socket.connect((google_addr, 80))
     print(f"Connected client to {google_addr}...")
 
+    #sleep the task (to verify multithreading works)
     time.sleep(10)
 
     #Echo text from client to google
@@ -69,7 +70,7 @@ if __name__ == "__main__":
     proxy_server_address = ('localhost', 8001)
     proxy_server_socket.bind(proxy_server_address)
     proxy_server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    proxy_server_socket.listen(2)
+    proxy_server_socket.listen()
     print("Proxy server is listening on port 8001...")
 
     start_server_st()

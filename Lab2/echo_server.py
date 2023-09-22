@@ -7,9 +7,14 @@
 
 import socket
 from threading import Thread
+import time #for validating multithreaded functionality
 
 def handle_connection(client_socket, client_address):
     print(f"Accepted connection from {client_address}")
+
+    #sleep the task (to verify multithreading works)
+    time.sleep(10)
+
     while True:
         # Receive data from the client
         data = client_socket.recv(1024)
@@ -36,7 +41,7 @@ def start_server_mt():
     while True:
         client_socket, client_address = server_socket.accept()
         thread = Thread(target=handle_connection, args=(client_socket, client_address))
-        thread.run()
+        thread.start() #create a new thread, and handle the connection
 
 if __name__ == "__main__":
     server_host = "localhost"
@@ -55,5 +60,5 @@ if __name__ == "__main__":
     print("Server is listening on port 8001...")
 
 
-    start_server_st()
-    #start_server_mt()
+    #start_server_st()
+    start_server_mt()
