@@ -26,21 +26,6 @@ def handle_connection(client_socket, client_address):
             break
 
 def start_server_st():
-    server_host = "localhost"
-    server_port = 8001
-
-    # Create a socket object
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    # Bind the socket to a specific address and port
-    server_address = ('localhost', 8001)
-    server_socket.bind(server_address)
-    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-
-    # Listen for incoming connections
-    server_socket.listen()
-    print("Server is listening on port 8001...")
-
     while True:
         # Wait for a connection
         print("Waiting for a connection...")
@@ -48,6 +33,12 @@ def start_server_st():
         handle_connection(client_socket, client_address)
 
 def start_server_mt():
+    while True:
+        client_socket, client_address = server_socket.accept()
+        thread = Thread(target=handle_connection, args=(client_socket, client_address))
+        thread.run()
+
+if __name__ == "__main__":
     server_host = "localhost"
     server_port = 8001
 
@@ -63,11 +54,6 @@ def start_server_mt():
     server_socket.listen()
     print("Server is listening on port 8001...")
 
-    while True:
-        client_socket, client_address = server_socket.accept()
-        thread = Thread(target=handle_connection, args=(client_socket, client_address))
-        thread.run()
 
-if __name__ == "__main__":
-    #start_server_st()
-    start_server_mt()
+    start_server_st()
+    #start_server_mt()
