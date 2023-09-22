@@ -6,6 +6,7 @@
 
 import socket
 from threading import Thread
+import time #for validating multithreaded functionality
 
 def start_server_st():
     while True:
@@ -15,10 +16,11 @@ def start_server_st():
         handle_connection(client_socket, client_address)
     
 def start_server_mt():
-        while True:
-            client_socket, client_address = proxy_server_socket.accept()
-            thread = Thread(target=handle_connection, args=(client_socket, client_address))
-            thread.run()
+    while True:
+        client_socket, client_address = proxy_server_socket.accept()
+        thread = Thread(target=handle_connection, args=(client_socket, client_address))
+        thread.start()
+
 def handle_connection(client_socket, client_address):
     print(f"Accepted client connection from {client_address}")
 
@@ -27,6 +29,7 @@ def handle_connection(client_socket, client_address):
     google_socket.connect((google_addr, 80))
     print(f"Connected client to {google_addr}...")
 
+    time.sleep(10)
 
     #Echo text from client to google
     #Echo response from google to client
@@ -66,8 +69,8 @@ if __name__ == "__main__":
     proxy_server_address = ('localhost', 8001)
     proxy_server_socket.bind(proxy_server_address)
     proxy_server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    proxy_server_socket.listen()
+    proxy_server_socket.listen(2)
     print("Proxy server is listening on port 8001...")
 
-    #start_server_st()
-    start_server_mt()
+    start_server_st()
+    #start_server_mt()
